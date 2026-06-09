@@ -18,6 +18,7 @@ type HomeScreenProps = {
 
 export default function HomeScreen({ theme, toggleTheme }: HomeScreenProps) {
   const isDark = theme === "dark";
+  const data = sampleSensorData;
 
   const colors = {
     background: isDark ? "#05070A" : "#F8FAFC",
@@ -37,7 +38,7 @@ export default function HomeScreen({ theme, toggleTheme }: HomeScreenProps) {
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.phoneContent}>
           <View style={styles.topRow}>
-            <Text style={[styles.time, { color: colors.text }]}>9:41</Text>
+            
 
             <Pressable
               onPress={toggleTheme}
@@ -64,7 +65,7 @@ export default function HomeScreen({ theme, toggleTheme }: HomeScreenProps) {
             <View style={[styles.brandDot, { backgroundColor: colors.green }]} />
             <Text style={[styles.brand, { color: colors.text }]}>MATERNA</Text>
             <Text style={[styles.week, { color: colors.mutedText }]}>
-              Maya · week 28
+            {data.mother.name} · week {data.mother.pregnancyWeek}
             </Text>
           </View>
 
@@ -92,22 +93,21 @@ export default function HomeScreen({ theme, toggleTheme }: HomeScreenProps) {
                   style={[styles.statusDot, { backgroundColor: colors.green }]}
                 />
                 <Text style={[styles.statusText, { color: colors.green }]}>
-                  Green · All clear
+                  {data.risk.level} · {data.risk.message}
                 </Text>
               </View>
 
               <Text style={[styles.confidence, { color: colors.mutedText }]}>
-                AI confidence 97%
+                AI confidence {data.risk.confidence}
               </Text>
             </View>
 
             <Text style={[styles.heroTitle, { color: colors.text }]}>
-              Everything{"\n"}looks healthy.
+              {data.risk.headline}
             </Text>
 
             <Text style={[styles.heroBody, { color: colors.softText }]}>
-              Materna sees stable vitals in your normal range. Nothing for you
-              to do — keep living your day.
+                {data.risk.description}
             </Text>
 
             <View style={[styles.divider, { backgroundColor: colors.border }]} />
@@ -116,7 +116,7 @@ export default function HomeScreen({ theme, toggleTheme }: HomeScreenProps) {
               WHAT HAPPENS
             </Text>
             <Text style={[styles.actionText, { color: colors.text }]}>
-              No action needed
+              {data.risk.action}
             </Text>
           </View>
 
@@ -129,14 +129,47 @@ export default function HomeScreen({ theme, toggleTheme }: HomeScreenProps) {
             </Text>
           </View>
 
-          <View style={styles.vitalsGrid}>
-            <VitalCard title="Heart rate" value="77" unit="bpm" />
-            <VitalCard title="HRV" value="60" unit="ms" />
-            <VitalCard title="Blood pressure" value="115/74" unit="mmHg" />
-            <VitalCard title="Oxygen SpO₂" value="99" unit="%" />
-            <VitalCard title="Skin temp" value="98.4" unit="°F" />
-            <VitalCard title="Respiration" value="15" unit="/min" />
-          </View>
+            <VitalCard
+                title={data.vitals.heartRate.title}
+                value={data.vitals.heartRate.value}
+                unit={data.vitals.heartRate.unit}
+                theme={theme}
+            />
+
+            <VitalCard
+                title={data.vitals.hrv.title}
+                value={data.vitals.hrv.value}
+                unit={data.vitals.hrv.unit}
+                theme={theme}
+            />
+
+            <VitalCard
+                title={data.vitals.bloodPressure.title}
+                value={data.vitals.bloodPressure.value}
+                unit={data.vitals.bloodPressure.unit}
+                theme={theme}
+            />
+
+            <VitalCard
+                title={data.vitals.oxygen.title}
+                value={data.vitals.oxygen.value}
+                unit={data.vitals.oxygen.unit}
+                theme={theme}
+            />
+
+            <VitalCard
+                title={data.vitals.skinTemp.title}
+                value={data.vitals.skinTemp.value}
+                unit={data.vitals.skinTemp.unit}
+                theme={theme}
+            />
+
+            <VitalCard
+                title={data.vitals.respiration.title}
+                value={data.vitals.respiration.value}
+                unit={data.vitals.respiration.unit}
+                theme={theme}
+            />
 
           <Pressable
             style={[
@@ -202,10 +235,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 8,
   },
-  time: {
-    fontSize: 16,
-    fontWeight: "700",
-  },
+
   themeButton: {
     flexDirection: "row",
     alignItems: "center",
