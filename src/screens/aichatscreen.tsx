@@ -12,11 +12,11 @@ import {
 // At the top of HomeScreen, you likely already have this import:
 import { sampleSensorData } from "../data/sampleSensorData";
 
-// Then when you render AIChatScreen, pass the name:
+
 <AIChatScreen
   theme={theme}
   onClose={() => setShowChat(false)}
-  name={sampleSensorData.mother.name}  // adjust the path to match your data structure
+  name={sampleSensorData.mother.name} 
 />
 
 interface Props {
