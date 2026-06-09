@@ -9,7 +9,7 @@ export interface ProfileData {
   age: string;
   weightLbs: string;
   heightFt: string;
-  heightIn: string;
+  heightIn: string; 
   pregnancyWeek: string;
   previousPregnancies: string;
   medications: string;

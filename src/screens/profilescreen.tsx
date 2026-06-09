@@ -1,3 +1,4 @@
+import { saveProfile, loadProfile, clearProfile } from "../storage/profileStorage";
 import React, { useState } from "react";
 import {
   View,
