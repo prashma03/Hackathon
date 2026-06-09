@@ -1,14 +1,23 @@
 import React from "react";
-import { sampleSensorData } from "../data/sampleSensorData";
 import {
-  View,
-  Text,
-  StyleSheet,
   SafeAreaView,
   ScrollView,
+  View,
+  Text,
   Pressable,
+  StyleSheet,
 } from "react-native";
-import { Home, Hospital, User, Sparkles, Sun, Moon } from "lucide-react-native";
+import { sampleSensorData } from "../data/sampleSensorData";
+import {
+  Home,
+  Hospital,
+  User,
+  Sparkles,
+  Sun,
+  Moon,
+  Bluetooth,
+  Battery,
+} from "lucide-react-native";
 import VitalCard from "../components/VitalCard";
 
 type HomeScreenProps = {
@@ -37,17 +46,33 @@ export default function HomeScreen({ theme, toggleTheme }: HomeScreenProps) {
     <SafeAreaView style={[styles.safeArea, { backgroundColor: colors.background }]}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.phoneContent}>
-          <View style={styles.topRow}>
-            
 
+          {/* ── TOP ROW: Bracelet status left, theme toggle right ── */}
+          <View style={styles.topRow}>
+
+            {/* Bracelet status */}
+            <View style={styles.braceletStatus}>
+              <Bluetooth size={13} color={colors.green} />
+              <Text style={[styles.braceletText, { color: colors.mutedText }]}>
+                Bracelet connected
+              </Text>
+              <View style={[styles.dot, { backgroundColor: colors.border }]} />
+              <Battery size={13} color={colors.mutedText} />
+              <Text style={[styles.braceletText, { color: colors.mutedText }]}>
+                {data.bracelet.battery}%
+              </Text>
+              <View style={[styles.dot, { backgroundColor: colors.border }]} />
+              <Text style={[styles.braceletText, { color: colors.mutedText }]}>
+                {data.bracelet.lastSynced}
+              </Text>
+            </View>
+
+            {/* Theme toggle */}
             <Pressable
               onPress={toggleTheme}
               style={[
                 styles.themeButton,
-                {
-                  backgroundColor: colors.card,
-                  borderColor: colors.border,
-                },
+                { backgroundColor: colors.card, borderColor: colors.border },
               ]}
             >
               {isDark ? (
@@ -61,14 +86,16 @@ export default function HomeScreen({ theme, toggleTheme }: HomeScreenProps) {
             </Pressable>
           </View>
 
+          {/* ── BRAND ROW ── */}
           <View style={styles.brandRow}>
             <View style={[styles.brandDot, { backgroundColor: colors.green }]} />
             <Text style={[styles.brand, { color: colors.text }]}>MATERNA</Text>
             <Text style={[styles.week, { color: colors.mutedText }]}>
-            {data.mother.name} · week {data.mother.pregnancyWeek}
+              {data.mother.name} · Week {data.mother.pregnancyWeek}
             </Text>
           </View>
 
+          {/* ── RISK CARD ── */}
           <View
             style={[
               styles.statusCard,
@@ -83,20 +110,14 @@ export default function HomeScreen({ theme, toggleTheme }: HomeScreenProps) {
               <View
                 style={[
                   styles.statusPill,
-                  {
-                    backgroundColor: colors.greenSoft,
-                    borderColor: colors.greenBorder,
-                  },
+                  { backgroundColor: colors.greenSoft, borderColor: colors.greenBorder },
                 ]}
               >
-                <View
-                  style={[styles.statusDot, { backgroundColor: colors.green }]}
-                />
+                <View style={[styles.statusDot, { backgroundColor: colors.green }]} />
                 <Text style={[styles.statusText, { color: colors.green }]}>
                   {data.risk.level} · {data.risk.message}
                 </Text>
               </View>
-
               <Text style={[styles.confidence, { color: colors.mutedText }]}>
                 AI confidence {data.risk.confidence}
               </Text>
@@ -105,9 +126,8 @@ export default function HomeScreen({ theme, toggleTheme }: HomeScreenProps) {
             <Text style={[styles.heroTitle, { color: colors.text }]}>
               {data.risk.headline}
             </Text>
-
             <Text style={[styles.heroBody, { color: colors.softText }]}>
-                {data.risk.description}
+              {data.risk.description}
             </Text>
 
             <View style={[styles.divider, { backgroundColor: colors.border }]} />
@@ -120,6 +140,7 @@ export default function HomeScreen({ theme, toggleTheme }: HomeScreenProps) {
             </Text>
           </View>
 
+          {/* ── VITALS SECTION ── */}
           <View style={styles.sectionHeader}>
             <Text style={[styles.sectionTitle, { color: colors.text }]}>
               What the band is sensing
@@ -129,55 +150,18 @@ export default function HomeScreen({ theme, toggleTheme }: HomeScreenProps) {
             </Text>
           </View>
 
-            <VitalCard
-                title={data.vitals.heartRate.title}
-                value={data.vitals.heartRate.value}
-                unit={data.vitals.heartRate.unit}
-                theme={theme}
-            />
+          <VitalCard title={data.vitals.heartRate.title} value={data.vitals.heartRate.value} unit={data.vitals.heartRate.unit} theme={theme} />
+          <VitalCard title={data.vitals.hrv.title} value={data.vitals.hrv.value} unit={data.vitals.hrv.unit} theme={theme} />
+          <VitalCard title={data.vitals.bloodPressure.title} value={data.vitals.bloodPressure.value} unit={data.vitals.bloodPressure.unit} theme={theme} />
+          <VitalCard title={data.vitals.oxygen.title} value={data.vitals.oxygen.value} unit={data.vitals.oxygen.unit} theme={theme} />
+          <VitalCard title={data.vitals.skinTemp.title} value={data.vitals.skinTemp.value} unit={data.vitals.skinTemp.unit} theme={theme} />
+          <VitalCard title={data.vitals.respiration.title} value={data.vitals.respiration.value} unit={data.vitals.respiration.unit} theme={theme} />
 
-            <VitalCard
-                title={data.vitals.hrv.title}
-                value={data.vitals.hrv.value}
-                unit={data.vitals.hrv.unit}
-                theme={theme}
-            />
-
-            <VitalCard
-                title={data.vitals.bloodPressure.title}
-                value={data.vitals.bloodPressure.value}
-                unit={data.vitals.bloodPressure.unit}
-                theme={theme}
-            />
-
-            <VitalCard
-                title={data.vitals.oxygen.title}
-                value={data.vitals.oxygen.value}
-                unit={data.vitals.oxygen.unit}
-                theme={theme}
-            />
-
-            <VitalCard
-                title={data.vitals.skinTemp.title}
-                value={data.vitals.skinTemp.value}
-                unit={data.vitals.skinTemp.unit}
-                theme={theme}
-            />
-
-            <VitalCard
-                title={data.vitals.respiration.title}
-                value={data.vitals.respiration.value}
-                unit={data.vitals.respiration.unit}
-                theme={theme}
-            />
-
+          {/* ── ASK MATERNA BUTTON ── */}
           <Pressable
             style={[
               styles.askButton,
-              {
-                backgroundColor: isDark ? "#19231E" : "#DCFCE7",
-                borderColor: colors.greenBorder,
-              },
+              { backgroundColor: isDark ? "#19231E" : "#DCFCE7", borderColor: colors.greenBorder },
             ]}
           >
             <Sparkles size={16} color={colors.green} />
@@ -186,28 +170,22 @@ export default function HomeScreen({ theme, toggleTheme }: HomeScreenProps) {
             </Text>
           </Pressable>
 
+          {/* ── BOTTOM NAV ── */}
           <View style={[styles.bottomNav, { borderTopColor: colors.border }]}>
             <View style={styles.navItem}>
               <Home size={22} color={colors.green} />
-              <Text style={[styles.navTextActive, { color: colors.green }]}>
-                Today
-              </Text>
+              <Text style={[styles.navTextActive, { color: colors.green }]}>Today</Text>
             </View>
-
             <View style={styles.navItem}>
               <Hospital size={22} color={colors.mutedText} />
-              <Text style={[styles.navText, { color: colors.mutedText }]}>
-                Hospitals
-              </Text>
+              <Text style={[styles.navText, { color: colors.mutedText }]}>Hospitals</Text>
             </View>
-
             <View style={styles.navItem}>
               <User size={22} color={colors.mutedText} />
-              <Text style={[styles.navText, { color: colors.mutedText }]}>
-                Profile
-              </Text>
+              <Text style={[styles.navText, { color: colors.mutedText }]}>Profile</Text>
             </View>
           </View>
+
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -215,13 +193,8 @@ export default function HomeScreen({ theme, toggleTheme }: HomeScreenProps) {
 }
 
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-  },
-  scrollContent: {
-    flexGrow: 1,
-    alignItems: "center",
-  },
+  safeArea: { flex: 1 },
+  scrollContent: { flexGrow: 1, alignItems: "center" },
   phoneContent: {
     width: "100%",
     maxWidth: 430,
@@ -229,13 +202,27 @@ const styles = StyleSheet.create({
     paddingTop: 18,
     paddingBottom: 28,
   },
+
+  // ── TOP ROW ──
   topRow: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     marginBottom: 8,
   },
-
+  braceletStatus: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 5,
+  },
+  braceletText: {
+    fontSize: 11,
+  },
+  dot: {
+    width: 3,
+    height: 3,
+    borderRadius: 99,
+  },
   themeButton: {
     flexDirection: "row",
     alignItems: "center",
@@ -245,30 +232,20 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 7,
   },
-  themeButtonText: {
-    fontSize: 12,
-    fontWeight: "700",
-  },
+  themeButtonText: { fontSize: 12, fontWeight: "700" },
+
+  // ── BRAND ──
   brandRow: {
     flexDirection: "row",
     alignItems: "center",
     gap: 8,
     marginBottom: 16,
   },
-  brandDot: {
-    width: 10,
-    height: 10,
-    borderRadius: 99,
-  },
-  brand: {
-    fontSize: 14,
-    fontWeight: "900",
-    letterSpacing: 2,
-  },
-  week: {
-    fontSize: 12,
-    marginLeft: 8,
-  },
+  brandDot: { width: 10, height: 10, borderRadius: 99 },
+  brand: { fontSize: 14, fontWeight: "900", letterSpacing: 2 },
+  week: { fontSize: 12, marginLeft: 8 },
+
+  // ── RISK CARD ──
   statusCard: {
     borderWidth: 1,
     borderLeftWidth: 4,
@@ -292,61 +269,26 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     gap: 8,
   },
-  statusDot: {
-    width: 9,
-    height: 9,
-    borderRadius: 99,
-  },
-  statusText: {
-    fontSize: 13,
-    fontWeight: "800",
-  },
-  confidence: {
-    fontSize: 10,
-  },
-  heroTitle: {
-    fontSize: 29,
-    lineHeight: 35,
-    fontWeight: "900",
-    marginBottom: 14,
-  },
-  heroBody: {
-    fontSize: 15,
-    lineHeight: 22,
-  },
-  divider: {
-    height: 1,
-    marginVertical: 18,
-  },
-  smallLabel: {
-    fontSize: 10,
-    letterSpacing: 2,
-    marginBottom: 6,
-  },
-  actionText: {
-    fontSize: 14,
-    fontWeight: "700",
-  },
+  statusDot: { width: 9, height: 9, borderRadius: 99 },
+  statusText: { fontSize: 13, fontWeight: "800" },
+  confidence: { fontSize: 10 },
+  heroTitle: { fontSize: 29, lineHeight: 35, fontWeight: "900", marginBottom: 14 },
+  heroBody: { fontSize: 15, lineHeight: 22 },
+  divider: { height: 1, marginVertical: 18 },
+  smallLabel: { fontSize: 10, letterSpacing: 2, marginBottom: 6 },
+  actionText: { fontSize: 14, fontWeight: "700" },
+
+  // ── VITALS ──
   sectionHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     marginBottom: 14,
   },
-  sectionTitle: {
-    fontSize: 16,
-    fontWeight: "900",
-  },
-  liveText: {
-    fontSize: 10,
-    letterSpacing: 1,
-  },
-  vitalsGrid: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "space-between",
-    gap: 10,
-  },
+  sectionTitle: { fontSize: 16, fontWeight: "900" },
+  liveText: { fontSize: 10, letterSpacing: 1 },
+
+  // ── ASK BUTTON ──
   askButton: {
     alignSelf: "flex-end",
     marginTop: -58,
@@ -359,10 +301,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 18,
     paddingVertical: 12,
   },
-  askButtonText: {
-    fontSize: 14,
-    fontWeight: "800",
-  },
+  askButtonText: { fontSize: 14, fontWeight: "800" },
+
+  // ── BOTTOM NAV ──
   bottomNav: {
     marginTop: 28,
     paddingTop: 16,
@@ -370,14 +311,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
     borderTopWidth: 1,
   },
-  navItem: {
-    alignItems: "center",
-    gap: 4,
-  },
-  navTextActive: {
-    fontSize: 11,
-  },
-  navText: {
-    fontSize: 11,
-  },
+  navItem: { alignItems: "center", gap: 4 },
+  navTextActive: { fontSize: 11 },
+  navText: { fontSize: 11 },
 });
