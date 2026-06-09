@@ -9,15 +9,6 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
-// At the top of HomeScreen, you likely already have this import:
-import { sampleSensorData } from "../data/sampleSensorData";
-
-
-<AIChatScreen
-  theme={theme}
-  onClose={() => setShowChat(false)}
-  name={sampleSensorData.mother.name} 
-/>
 
 interface Props {
   theme: "dark" | "light";
@@ -31,8 +22,6 @@ interface Message {
   text: string;
   alert?: boolean;
 }
-
-// ── Hardcoded smart responses ──────────────────────────────────────────────────
 
 const RESPONSES: { keywords: string[]; reply: string; alert?: boolean }[] = [
   {
@@ -94,9 +83,7 @@ function getResponse(input: string): { reply: string; alert?: boolean } {
   return { reply: FALLBACK };
 }
 
-// ── Component ─────────────────────────────────────────────────────────────────
-
-export default function AIChatScreen({ theme, onClose }: Props) {
+export default function AIChatScreen({ theme, onClose, name }: Props) {
   const dark = theme === "dark";
   const c = dark ? colors.dark : colors.light;
 
@@ -139,7 +126,6 @@ export default function AIChatScreen({ theme, onClose }: Props) {
       behavior={Platform.OS === "ios" ? "padding" : undefined}
       keyboardVerticalOffset={90}
     >
-      {/* Header */}
       <View style={[styles.header, { borderBottomColor: c.divider }]}>
         <TouchableOpacity onPress={onClose} style={styles.backBtn}>
           <Text style={[styles.backText, { color: c.accent }]}>← Back</Text>
@@ -148,7 +134,6 @@ export default function AIChatScreen({ theme, onClose }: Props) {
         <View style={{ width: 60 }} />
       </View>
 
-      {/* Messages */}
       <ScrollView
         ref={scrollRef}
         contentContainerStyle={styles.messages}
@@ -183,7 +168,6 @@ export default function AIChatScreen({ theme, onClose }: Props) {
         ))}
       </ScrollView>
 
-      {/* Input */}
       <View style={[styles.inputRow, { borderTopColor: c.divider, backgroundColor: c.background }]}>
         <TextInput
           style={[styles.textInput, { backgroundColor: c.inputBg, borderColor: c.inputBorder, color: c.text }]}
@@ -207,8 +191,6 @@ export default function AIChatScreen({ theme, onClose }: Props) {
   );
 }
 
-// ── Colors ────────────────────────────────────────────────────────────────────
-
 function getColors(mode: "dark" | "light") {
   const isDark = mode === "dark";
   return {
@@ -228,8 +210,6 @@ function getColors(mode: "dark" | "light") {
 }
 
 const colors = { dark: getColors("dark"), light: getColors("light") };
-
-// ── Styles ────────────────────────────────────────────────────────────────────
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
