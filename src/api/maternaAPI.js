@@ -1,7 +1,12 @@
 import { MATERNA_URL, DOCTOR_CREDENTIALS } from '../config/config';
 
-const doctorHeaders = {
+const baseHeaders = {
   'Content-Type': 'application/json',
+  'ngrok-skip-browser-warning': 'true'
+};
+
+const doctorHeaders = {
+  ...baseHeaders,
   'Authorization': `Basic ${DOCTOR_CREDENTIALS}`
 };
 
@@ -9,7 +14,7 @@ export const sendSensorData = async (patientId, patientName, weeks, sensors) => 
   try {
     const response = await fetch(`${MATERNA_URL}/ingest`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: baseHeaders,
       body: JSON.stringify({
         patient_id:        patientId,
         patient_name:      patientName,
@@ -35,14 +40,13 @@ export const sendSensorData = async (patientId, patientName, weeks, sensors) => 
 };
 
 export const askAssistant = async (patientId, message, currentSensors, riskLevel) => {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 90000);
   try {
     const response = await fetch(`${MATERNA_URL}/assist`, {
       method: 'POST',
-      headers: { 
-        'Content-Type': 'application/json',
-        'ngrok-skip-browser-warning': 'true'
-
-       },
+      headers: baseHeaders,
+      signal: controller.signal,
       body: JSON.stringify({
         patient_id: patientId,
         message:    message,
@@ -60,8 +64,14 @@ export const askAssistant = async (patientId, message, currentSensors, riskLevel
     const result = await response.json();
     return result.response;
   } catch (error) {
+    if (error.name === 'AbortError') {
+      console.error('askAssistant timed out after 90s');
+      return "The assistant is taking too long to respond. Please try again.";
+    }
     console.error('askAssistant full error:', error.message, error);
     return "Unable to reach assistant. Please contact your doctor if concerned.";
+  } finally {
+    clearTimeout(timeoutId);
   }
 };
 

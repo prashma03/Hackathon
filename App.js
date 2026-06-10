@@ -128,7 +128,7 @@ export default function App() {
     return (
       <View style={{ flex: 1, backgroundColor: dark ? "#0f1117" : "#f5f7fa", alignItems: "center" }}>
         <View style={{ width: "100%", maxWidth: 430, flex: 1 }}>
-          <AIChatScreen theme={theme} onClose={() => setShowChat(false)} name="Maya" />
+          <AIChatScreen theme={theme} onClose={() => setShowChat(false)} name="Maya" patientId="patient_maya" />
         </View>
       </View>
     );

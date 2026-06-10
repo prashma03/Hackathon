@@ -8,12 +8,17 @@ import {
   StyleSheet,
   KeyboardAvoidingView,
   Platform,
+  ActivityIndicator,
 } from "react-native";
+import { askAssistant } from "../api/maternaAPI";
 
 interface Props {
   theme: "dark" | "light";
   onClose: () => void;
   name: string;
+  patientId?: string;
+  currentSensors?: object | null;
+  riskLevel?: string;
 }
 
 interface Message {
@@ -83,7 +88,7 @@ function getResponse(input: string): { reply: string; alert?: boolean } {
   return { reply: FALLBACK };
 }
 
-export default function AIChatScreen({ theme, onClose, name }: Props) {
+export default function AIChatScreen({ theme, onClose, name, patientId = "patient_maya", currentSensors = null, riskLevel = "stable" }: Props) {
   const dark = theme === "dark";
   const c = dark ? colors.dark : colors.light;
 
@@ -95,11 +100,12 @@ export default function AIChatScreen({ theme, onClose, name }: Props) {
     },
   ]);
   const [input, setInput] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const scrollRef = useRef<ScrollView>(null);
 
-  function handleSend() {
+  async function handleSend() {
     const trimmed = input.trim();
-    if (!trimmed) return;
+    if (!trimmed || isLoading) return;
 
     const userMsg: Message = {
       id: Date.now().toString(),
@@ -107,16 +113,32 @@ export default function AIChatScreen({ theme, onClose, name }: Props) {
       text: trimmed,
     };
 
-    const { reply, alert } = getResponse(trimmed);
-    const botMsg: Message = {
-      id: (Date.now() + 1).toString(),
-      from: "materna",
-      text: reply,
-      alert,
-    };
-
-    setMessages((prev) => [...prev, userMsg, botMsg]);
+    setMessages((prev) => [...prev, userMsg]);
     setInput("");
+    setIsLoading(true);
+    setTimeout(() => scrollRef.current?.scrollToEnd({ animated: true }), 100);
+
+    const apiResponse = await askAssistant(patientId, trimmed, currentSensors, riskLevel);
+
+    let botMsg: Message;
+    if (apiResponse && !apiResponse.startsWith("Unable to reach") && !apiResponse.startsWith("The assistant is taking")) {
+      botMsg = {
+        id: (Date.now() + 1).toString(),
+        from: "materna",
+        text: apiResponse,
+      };
+    } else {
+      const { reply, alert } = getResponse(trimmed);
+      botMsg = {
+        id: (Date.now() + 1).toString(),
+        from: "materna",
+        text: reply,
+        alert,
+      };
+    }
+
+    setIsLoading(false);
+    setMessages((prev) => [...prev, botMsg]);
     setTimeout(() => scrollRef.current?.scrollToEnd({ animated: true }), 100);
   }
 
@@ -166,6 +188,12 @@ export default function AIChatScreen({ theme, onClose, name }: Props) {
             </Text>
           </View>
         ))}
+        {isLoading && (
+          <View style={[styles.bubble, styles.botBubble, { backgroundColor: c.botBubble }]}>
+            <Text style={[styles.senderLabel, { color: c.textMuted }]}>Materna</Text>
+            <ActivityIndicator size="small" color={c.accent} />
+          </View>
+        )}
       </ScrollView>
 
       <View
@@ -186,9 +214,9 @@ export default function AIChatScreen({ theme, onClose, name }: Props) {
           multiline
         />
         <TouchableOpacity
-          style={[styles.sendBtn, { backgroundColor: input.trim() ? c.accent : c.inputBorder }]}
+          style={[styles.sendBtn, { backgroundColor: input.trim() && !isLoading ? c.accent : c.inputBorder }]}
           onPress={handleSend}
-          disabled={!input.trim()}
+          disabled={!input.trim() || isLoading}
         >
           <Text style={styles.sendBtnText}>↑</Text>
         </TouchableOpacity>
