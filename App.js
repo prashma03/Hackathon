@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import { BackHandler, View, Text, TouchableOpacity, StyleSheet, SafeAreaView, Pressable, ScrollView } from "react-native";
 import HomeScreen from "./src/screens/HomeScreen";
 import VitalsScreen from "./src/screens/VitalsScreen";
-import ProfileScreen from "./src/screens/ProfileScreen";
-import AIChatScreen from "./src/screens/AIChatScreen";
+import ProfileScreen from "./src/screens/profilescreen";
+import AIChatScreen from "./src/screens/aichatscreen";
 import HospitalsScreen from "./src/screens/HospitalsScreen";
-import EmergencyScreen from "./src/screens/EmergencyScreen";
-import LoginScreen from "./src/screens/LoginScreen";
+import EmergencyScreen from "./src/screens/emergencyscreen";
+import LoginScreen from "./src/screens/loginscreen";
 
 export default function App() {
   const [theme, setTheme] = useState("dark");
