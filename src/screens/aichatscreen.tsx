@@ -122,9 +122,9 @@ export default function AIChatScreen({ theme, onClose, name }: Props) {
 
   return (
     <KeyboardAvoidingView
-      style={[styles.container, { backgroundColor: c.background }]}
-      behavior={Platform.OS === "ios" ? "padding" : undefined}
-      keyboardVerticalOffset={90}
+        style={[styles.container, { backgroundColor: c.background }]}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        keyboardVerticalOffset={Platform.OS === "ios" ? 10 : 0}
     >
       <View style={[styles.header, { borderBottomColor: c.divider }]}>
         <TouchableOpacity onPress={onClose} style={styles.backBtn}>
@@ -168,7 +168,12 @@ export default function AIChatScreen({ theme, onClose, name }: Props) {
         ))}
       </ScrollView>
 
-      <View style={[styles.inputRow, { borderTopColor: c.divider, backgroundColor: c.background }]}>
+      <View
+        style={[
+          styles.inputRow,
+          { borderTopColor: c.divider, backgroundColor: c.background },
+        ]}
+      >
         <TextInput
           style={[styles.textInput, { backgroundColor: c.inputBg, borderColor: c.inputBorder, color: c.text }]}
           value={input}
@@ -177,6 +182,7 @@ export default function AIChatScreen({ theme, onClose, name }: Props) {
           placeholderTextColor={c.placeholder}
           returnKeyType="send"
           onSubmitEditing={handleSend}
+          onFocus={() => setTimeout(() => scrollRef.current?.scrollToEnd({ animated: true }), 120)}
           multiline
         />
         <TouchableOpacity
@@ -220,12 +226,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 14,
     borderBottomWidth: 1,
-    paddingTop: Platform.OS === "ios" ? 54 : 14,
+    paddingTop: Platform.OS === "ios" ? 54 : 40,
   },
   backBtn: { width: 60 },
   backText: { fontSize: 15, fontWeight: "600" },
   headerTitle: { fontSize: 16, fontWeight: "800", letterSpacing: 2 },
-  messages: { padding: 16, paddingBottom: 8 },
+  messages: { padding: 16, paddingBottom: 24 },
   bubble: {
     borderRadius: 14,
     padding: 12,
@@ -241,6 +247,8 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
     padding: 12,
     borderTopWidth: 1,
+    paddingBottom: Platform.OS === "ios" ? 26 : 18,
+    marginBottom: Platform.OS === "ios" ? 6 : 8,
     gap: 8,
   },
   textInput: {
