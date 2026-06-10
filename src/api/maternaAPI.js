@@ -38,7 +38,11 @@ export const askAssistant = async (patientId, message, currentSensors, riskLevel
   try {
     const response = await fetch(`${MATERNA_URL}/assist`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 
+        'Content-Type': 'application/json',
+        'ngrok-skip-browser-warning': 'true'
+
+       },
       body: JSON.stringify({
         patient_id: patientId,
         message:    message,
@@ -56,7 +60,7 @@ export const askAssistant = async (patientId, message, currentSensors, riskLevel
     const result = await response.json();
     return result.response;
   } catch (error) {
-    console.error('askAssistant error:', error);
+    console.error('askAssistant full error:', error.message, error);
     return "Unable to reach assistant. Please contact your doctor if concerned.";
   }
 };
