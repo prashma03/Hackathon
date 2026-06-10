@@ -3,7 +3,7 @@ import { BackHandler, View, Text, TouchableOpacity, StyleSheet, SafeAreaView, Pr
 import HomeScreen from "./src/screens/HomeScreen";
 import VitalsScreen from "./src/screens/VitalsScreen";
 import ProfileScreen from "./src/screens/profilescreen";
-import AIChatScreen from "./src/screens/aichatscreen";
+import AIChatScreen from "./src/screens/AIChatScreen";
 import HospitalsScreen from "./src/screens/HospitalsScreen";
 import EmergencyScreen from "./src/screens/emergencyscreen";
 import LoginScreen from "./src/screens/loginscreen";
