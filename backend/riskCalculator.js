@@ -15,12 +15,15 @@ function calculateRisk(data) {
 
   let level = "LOW";
 
-  if (score >= 8) level = "HIGH";
-  else if (score >= 4) level = "MODERATE";
+  if (score >= 8) {
+    level = "HIGH";
+  } else if (score >= 4) {
+    level = "MODERATE";
+  }
 
   return {
     score,
-    level
+    level,
   };
 }
 

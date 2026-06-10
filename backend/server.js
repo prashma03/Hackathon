@@ -17,37 +17,62 @@ let patientVitals = {
 };
 
 // Test route
-app.get("/", (req, res) => {
+app.get("/", (_req, res) => {
   res.json({
     status: "Materna Backend Running",
   });
 });
 
-// Risk calculator route
+// Risk calculator
 app.post("/risk", (req, res) => {
-  const patientData = req.body;
+  try {
+    const patientData = req.body;
 
-  const result = calculateRisk(patientData);
+    const result = calculateRisk(patientData);
 
-  res.json({
-    success: true,
-    risk: result,
-  });
+    res.json({
+      success: true,
+      risk: result,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Risk calculation failed.",
+    });
+  }
 });
 
 // Update patient vitals
 app.post("/vitals", (req, res) => {
-  patientVitals = req.body;
+  const {
+    heartRate,
+    bloodPressure,
+    oxygen,
+    temperature,
+    respiration,
+  } = req.body;
+
+  patientVitals = {
+    heartRate: heartRate || 0,
+    bloodPressure: bloodPressure || "",
+    oxygen: oxygen || 0,
+    temperature: temperature || 0,
+    respiration: respiration || 0,
+  };
 
   res.json({
     success: true,
     message: "Vitals updated successfully",
+    vitals: patientVitals,
   });
 });
 
-// Get latest patient vitals
-app.get("/vitals", (req, res) => {
-  res.json(patientVitals);
+// Doctor dashboard gets latest vitals
+app.get("/vitals", (_req, res) => {
+  res.json({
+    success: true,
+    vitals: patientVitals,
+  });
 });
 
 const PORT = process.env.PORT || 5000;
