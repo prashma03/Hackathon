@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { BackHandler, View, Text, TouchableOpacity, StyleSheet, SafeAreaView, Pressable, ScrollView } from "react-native";
+import { Alert, Linking, Modal, BackHandler, View, Text, TouchableOpacity, StyleSheet, SafeAreaView, Pressable, ScrollView } from "react-native";
 import HomeScreen from "./src/screens/HomeScreen";
 import VitalsScreen from "./src/screens/VitalsScreen";
 import ProfileScreen from "./src/screens/profilescreen";
 import AIChatScreen from "./src/screens/AIChatScreen";
 import HospitalsScreen from "./src/screens/HospitalsScreen";
 import EmergencyScreen from "./src/screens/emergencyscreen";
-import LoginScreen from "./src/screens/loginscreen";
+import loginscreen from "./src/screens/loginscreen";
 
 export default function App() {
   const [theme, setTheme] = useState("dark");
@@ -213,6 +213,21 @@ function DoctorDashboard({ theme, onLogout }) {
   };
 
   const [filter, setFilter] = useState("All");
+  const [selectedPatient, setSelectedPatient] = useState(null);
+
+  function handleCall(patient) {
+    Alert.alert(
+      "Call Patient",
+      `Call ${patient.name}?\n${patient.phone.replace(/(\d{3})(\d{3})(\d{4})/, "($1) $2-$3")}`,
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Call Now",
+          onPress: () => Linking.openURL(`tel:${patient.phone}`),
+        },
+      ]
+    );
+  }
 
   const patients = [
     {
@@ -221,6 +236,15 @@ function DoctorDashboard({ theme, onLogout }) {
       hr: 77, spo2: 99, temp: 98.4, resp: 15,
       bp: "115/74", emergency: false,
       factor: "No risk factors detected",
+      phone: "5011234567",
+      medications: "Prenatal vitamins, Iron supplement",
+      conditions: "None",
+      lastVisit: "June 3, 2026",
+      nextVisit: "June 17, 2026",
+      hospitalDist: "22 miles",
+      emergencyContact: "James Johnson (Husband) · 501-987-6543",
+      aiReport: "Patient vitals are within normal range. No immediate concerns detected. Continue routine monitoring and scheduled prenatal visits.",
+      symptoms: "None reported",
     },
     {
       id: "2", name: "Maria Gonzalez", age: 32, week: 34,
@@ -228,6 +252,15 @@ function DoctorDashboard({ theme, onLogout }) {
       hr: 119, spo2: 92, temp: 100.2, resp: 22,
       bp: "163/109", emergency: true,
       factor: "Severe hypertension + low oxygen",
+      phone: "5019998888",
+      medications: "Labetalol 200mg, Prenatal vitamins",
+      conditions: "Gestational hypertension, prior C-section",
+      lastVisit: "June 7, 2026",
+      nextVisit: "June 10, 2026",
+      hospitalDist: "47 miles",
+      emergencyContact: "Carlos Gonzalez (Husband) · 870-555-0192",
+      aiReport: "URGENT: Patient reports severe headache and blurry vision. BP critically elevated at 163/109. SpO2 at 92% is dangerously low. Signs consistent with severe preeclampsia. Immediate medical intervention recommended.",
+      symptoms: "Severe headache, blurry vision, swelling in hands and face",
     },
     {
       id: "3", name: "Tanya Williams", age: 25, week: 22,
@@ -235,6 +268,15 @@ function DoctorDashboard({ theme, onLogout }) {
       hr: 92, spo2: 96, temp: 99.1, resp: 18,
       bp: "139/90", emergency: false,
       factor: "Early hypertension pattern",
+      phone: "8705554321",
+      medications: "Prenatal vitamins, Baby aspirin 81mg",
+      conditions: "Family history of hypertension",
+      lastVisit: "May 28, 2026",
+      nextVisit: "June 11, 2026",
+      hospitalDist: "38 miles",
+      emergencyContact: "Darnell Williams (Partner) · 870-555-7788",
+      aiReport: "Patient shows early hypertension trend. BP readings have been elevated over the past two weeks. Recommend closer monitoring and dietary sodium reduction. Consider telehealth check-in before next in-person visit.",
+      symptoms: "Mild headache, occasional dizziness",
     },
     {
       id: "4", name: "Sarah Davis", age: 30, week: 30,
@@ -242,6 +284,15 @@ function DoctorDashboard({ theme, onLogout }) {
       hr: 85, spo2: 97, temp: 98.8, resp: 16,
       bp: "128/82", emergency: false,
       factor: "Elevated BP trend",
+      phone: "5013216549",
+      medications: "Prenatal vitamins, Magnesium supplement",
+      conditions: "Gestational diabetes (diet controlled)",
+      lastVisit: "June 1, 2026",
+      nextVisit: "June 15, 2026",
+      hospitalDist: "31 miles",
+      emergencyContact: "Tom Davis (Husband) · 501-444-2233",
+      aiReport: "Patient has gestational diabetes managed through diet. BP slightly elevated compared to baseline but within acceptable range. Monitor for any upward trend. Blood glucose logs look consistent.",
+      symptoms: "Occasional fatigue, mild swelling in feet",
     },
     {
       id: "5", name: "Lisa Brown", age: 22, week: 18,
@@ -249,11 +300,133 @@ function DoctorDashboard({ theme, onLogout }) {
       hr: 72, spo2: 98, temp: 98.2, resp: 14,
       bp: "112/70", emergency: false,
       factor: "No risk factors detected",
+      phone: "8709876543",
+      medications: "Prenatal vitamins",
+      conditions: "None",
+      lastVisit: "May 30, 2026",
+      nextVisit: "June 20, 2026",
+      hospitalDist: "19 miles",
+      emergencyContact: "Reggie Brown (Husband) · 870-321-8877",
+      aiReport: "All vitals normal. Patient is low-risk and progressing well. No concerns at this time. Routine prenatal schedule is appropriate.",
+      symptoms: "None reported",
     },
   ];
 
   const filtered = filter === "All" ? patients : patients.filter(p => p.risk === filter);
   const emergency = patients.filter(p => p.emergency);
+
+  // ── PATIENT DETAIL SCREEN ───────────────────────────────
+  if (selectedPatient) {
+    const p = selectedPatient;
+    return (
+      <View style={{ flex: 1, backgroundColor: c.bg }}>
+        <ScrollView contentContainerStyle={{ paddingBottom: 40 }}>
+          {/* Back header */}
+          <View style={[doc.header, { borderBottomColor: c.border }]}>
+            <TouchableOpacity onPress={() => setSelectedPatient(null)} style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+              <Text style={{ color: c.purple, fontSize: 22 }}>←</Text>
+              <Text style={{ color: c.purple, fontSize: 15, fontWeight: "700" }}>Back to Dashboard</Text>
+            </TouchableOpacity>
+            <View style={[doc.riskBadge, { backgroundColor: p.riskColor + "22", borderColor: p.riskColor }]}>
+              <Text style={[doc.riskTxt, { color: p.riskColor }]}>{p.risk}</Text>
+            </View>
+          </View>
+
+          {/* Patient identity card */}
+          <View style={[doc.overviewCard, { backgroundColor: c.card, borderColor: p.riskColor }]}>
+            <View style={{ flexDirection: "row", alignItems: "center", gap: 14, marginBottom: 16 }}>
+              <View style={[doc.avatar, { width: 60, height: 60, borderRadius: 30, backgroundColor: p.riskColor + "22", borderColor: p.riskColor }]}>
+                <Text style={[doc.avatarTxt, { color: p.riskColor, fontSize: 20 }]}>
+                  {p.name.split(" ").map(n => n[0]).join("")}
+                </Text>
+              </View>
+              <View style={{ flex: 1 }}>
+                <Text style={[doc.docName, { color: c.text }]}>{p.name}</Text>
+                <Text style={[doc.docSub, { color: c.muted }]}>Age {p.age} · Week {p.week} · {p.county} County</Text>
+                <Text style={[doc.docSub, { color: c.muted }]}>📍 {p.hospitalDist} from nearest hospital</Text>
+              </View>
+            </View>
+
+            <View style={{ flexDirection: "row", gap: 8 }}>
+              <TouchableOpacity
+                style={[doc.actionBtn, { backgroundColor: c.purple, flex: 1 }]}
+                onPress={() => handleCall(p)}
+              >
+                <Text style={doc.actionBtnText}>📞 Call Patient</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={[doc.actionBtn, { backgroundColor: c.card, borderWidth: 1, borderColor: c.border, flex: 1 }]}>
+                <Text style={[doc.actionBtnText, { color: c.text }]}>💬 Message</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          {/* Vitals */}
+          <Text style={[doc.queueTitle, { color: c.text }]}>Live Vitals</Text>
+          <View style={[doc.overviewCard, { backgroundColor: c.card, borderColor: c.border }]}>
+            <View style={{ flexDirection: "row", flexWrap: "wrap", justifyContent: "space-around" }}>
+              {[
+                { l: "Heart Rate", v: p.hr, u: "bpm", warn: p.hr > 100, crit: p.hr > 120 },
+                { l: "SpO2", v: p.spo2, u: "%", warn: p.spo2 < 96, crit: p.spo2 < 94 },
+                { l: "Blood Pressure", v: p.bp, u: "", warn: false, crit: p.risk === "Critical" },
+                { l: "Temperature", v: p.temp, u: "°F", warn: p.temp > 99.5, crit: p.temp > 100.4 },
+                { l: "Respiration", v: p.resp, u: "rpm", warn: p.resp > 20, crit: p.resp > 24 },
+              ].map(item => (
+                <View key={item.l} style={[doc.vitalItem, { margin: 10, minWidth: 80 }]}>
+                  <Text style={[doc.vitalVal, { fontSize: 22, color: item.crit ? "#e11d48" : item.warn ? "#d97706" : "#22C55E" }]}>
+                    {item.v}
+                  </Text>
+                  <Text style={[doc.vitalUnit, { color: c.muted, fontSize: 11 }]}>{item.u}</Text>
+                  <Text style={[doc.vitalLabel, { color: c.muted, fontSize: 11, marginTop: 4, textAlign: "center" }]}>{item.l}</Text>
+                </View>
+              ))}
+            </View>
+          </View>
+
+          {/* Patient info */}
+          <Text style={[doc.queueTitle, { color: c.text }]}>Patient Information</Text>
+          <View style={[doc.overviewCard, { backgroundColor: c.card, borderColor: c.border }]}>
+            {[
+              { label: "Conditions", value: p.conditions },
+              { label: "Medications", value: p.medications },
+              { label: "Last Visit", value: p.lastVisit },
+              { label: "Next Visit", value: p.nextVisit },
+              { label: "Emergency Contact", value: p.emergencyContact },
+              { label: "Phone", value: p.phone.replace(/(\d{3})(\d{3})(\d{4})/, "($1) $2-$3") },
+            ].map(row => (
+              <View key={row.label} style={{ flexDirection: "row", paddingVertical: 8, borderBottomWidth: 1, borderBottomColor: c.border }}>
+                <Text style={{ color: c.muted, fontSize: 12, width: 130, fontWeight: "600" }}>{row.label}</Text>
+                <Text style={{ color: c.text, fontSize: 12, flex: 1 }}>{row.value}</Text>
+              </View>
+            ))}
+          </View>
+
+          {/* Reported symptoms */}
+          <Text style={[doc.queueTitle, { color: c.text }]}>Reported Symptoms</Text>
+          <View style={[doc.overviewCard, { backgroundColor: c.card, borderColor: c.border }]}>
+            <Text style={{ color: p.symptoms === "None reported" ? c.muted : "#d97706", fontSize: 13, lineHeight: 20 }}>
+              {p.symptoms}
+            </Text>
+          </View>
+
+          {/* AI report */}
+          <Text style={[doc.queueTitle, { color: c.text }]}>AI Assessment Report</Text>
+          <View style={[doc.overviewCard, {
+            backgroundColor: p.risk === "Critical" ? "#2d0a12" : p.risk === "High" ? "#1a1200" : isDark ? "#0d0d1a" : "#f5f3ff",
+            borderColor: p.risk === "Critical" ? "#e11d48" : p.risk === "High" ? "#d97706" : c.purple,
+          }]}>
+            <Text style={{ fontSize: 10, fontWeight: "800", letterSpacing: 1, color: c.purple, marginBottom: 8 }}>MATERNA AI · CLINICAL SUMMARY</Text>
+            <Text style={{
+              color: p.risk === "Critical" ? "#fca5a5" : p.risk === "High" ? "#fcd34d" : c.text,
+              fontSize: 13,
+              lineHeight: 20,
+            }}>
+              {p.aiReport}
+            </Text>
+          </View>
+        </ScrollView>
+      </View>
+    );
+  }
 
   return (
     <View style={{ flex: 1, backgroundColor: c.bg }}>
@@ -288,7 +461,7 @@ function DoctorDashboard({ theme, onLogout }) {
               Week {p.week} · HR {p.hr} · BP {p.bp} · SpO2 {p.spo2}%
             </Text>
             <View style={doc.emergencyBtns}>
-              <TouchableOpacity style={[doc.emergencyBtn, { backgroundColor: "#e11d48" }]}>
+              <TouchableOpacity style={[doc.emergencyBtn, { backgroundColor: "#e11d48" }]} onPress={() => handleCall(p)}>
                 <Text style={doc.emergencyBtnText}>📞 Call Patient</Text>
               </TouchableOpacity>
               <TouchableOpacity style={[doc.emergencyBtn, { backgroundColor: "#7f1d1d" }]}>
@@ -336,8 +509,10 @@ function DoctorDashboard({ theme, onLogout }) {
         <Text style={[doc.queueTitle, { color: c.text }]}>AI Priority Queue</Text>
 
         {filtered.map((p) => (
-          <View
+          <TouchableOpacity
             key={p.id}
+            onPress={() => setSelectedPatient(p)}
+            activeOpacity={0.85}
             style={[doc.patientCard, {
               backgroundColor: c.card,
               borderColor: p.emergency ? p.riskColor : c.border,
@@ -395,17 +570,23 @@ function DoctorDashboard({ theme, onLogout }) {
 
             {/* Action buttons */}
             <View style={[doc.actionRow, { borderTopColor: c.border }]}>
-              <TouchableOpacity style={[doc.actionBtn, { backgroundColor: c.purple }]}>
+              <TouchableOpacity
+                style={[doc.actionBtn, { backgroundColor: c.purple }]}
+                onPress={(e) => { e.stopPropagation && e.stopPropagation(); handleCall(p); }}
+              >
                 <Text style={doc.actionBtnText}>📞 Call</Text>
               </TouchableOpacity>
               <TouchableOpacity style={[doc.actionBtn, { backgroundColor: c.card, borderWidth: 1, borderColor: c.border }]}>
                 <Text style={[doc.actionBtnText, { color: c.text }]}>💬 Message</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={[doc.actionBtn, { backgroundColor: c.card, borderWidth: 1, borderColor: c.border }]}>
-                <Text style={[doc.actionBtnText, { color: c.text }]}>📋 Notes</Text>
+              <TouchableOpacity
+                style={[doc.actionBtn, { backgroundColor: c.card, borderWidth: 1, borderColor: c.border }]}
+                onPress={() => setSelectedPatient(p)}
+              >
+                <Text style={[doc.actionBtnText, { color: c.text }]}>📋 View Profile</Text>
               </TouchableOpacity>
             </View>
-          </View>
+          </TouchableOpacity>
         ))}
       </ScrollView>
     </View>
