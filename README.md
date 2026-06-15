@@ -496,22 +496,6 @@ Core message:
 - Add accessibility and language support
 - Establish incident response and clinical oversight
 
-## Team 5
-
-Challenge 05: Improving Rural Maternal Health
-
-- Kshitiz Khatiwada: Data ETL, research analysis, technology
-- Pronita Ghimire: UI design, public speaking, creative direction
-- Garay Gulmammadov: Web and graphic design, presentation
-- Alyson Chapman: Engineering, neural networks
-- Ivonne Barbosa-Melgarejo: Health data analysis, storytelling
-- Ali Rizwan: Python development, logical problem solving
-- Isidora Adeola: Health information education, application UI
-
-Challenge author: Allan Nichols, CEO of Mainline Health Systems, Inc.
-
-Coaches: Alese Johnston, Tim Reardon, and Allison Thompson.
-
 ## Safety Disclaimer
 
 Materna currently uses simulated data and unvalidated rules. It must not be
