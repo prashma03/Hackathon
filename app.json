@@ -6,15 +6,26 @@
     "orientation": "portrait",
     "icon": "./assets/materna-app-icon.png",
     "userInterfaceStyle": "automatic",
+
     "ios": {
       "icon": "./assets/materna-app-icon.png",
       "supportsTablet": true
     },
+
     "android": {
       "icon": "./assets/materna-app-icon.png"
     },
+
     "plugins": [
       "expo-asset"
-    ]
+    ],
+
+    "web": {
+      "bundler": "metro",
+    },
+
+    "experiments": {
+      "baseUrl": "/Materna"
+    }
   }
 }
