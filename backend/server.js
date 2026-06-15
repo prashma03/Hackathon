@@ -7,7 +7,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Store latest patient vitals
+// Store latest patient vitals  
 let patientVitals = {
   heartRate: 0,
   bloodPressure: "",
