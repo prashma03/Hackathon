@@ -17,6 +17,8 @@ type HomeScreenProps = {
   theme: "dark" | "light";
   toggleTheme: () => void;
   onAskMaterna: () => void;
+  activeScenario: RiskLevel;
+  onScenarioChange: (level: RiskLevel) => void;
 };
 
 function WaveBar({ delay, color }: { delay: number; color: string }) {
@@ -94,9 +96,14 @@ const vitalStyles = StyleSheet.create({
   unit: { fontSize: 12 },
 });
 
-export default function HomeScreen({ theme, toggleTheme, onAskMaterna }: HomeScreenProps) {
+export default function HomeScreen({
+  theme,
+  toggleTheme,
+  onAskMaterna,
+  activeScenario,
+  onScenarioChange,
+}: HomeScreenProps) {
   const isDark = theme === "dark";
-  const [activeScenario, setActiveScenario] = useState<RiskLevel>("Green");
   const data = scenarios[activeScenario];
 
   const colors = {
@@ -157,7 +164,7 @@ export default function HomeScreen({ theme, toggleTheme, onAskMaterna }: HomeScr
             {(["Green", "Yellow", "Red"] as RiskLevel[]).map((level) => (
               <TouchableOpacity
                 key={level}
-                onPress={() => setActiveScenario(level)}
+                onPress={() => onScenarioChange(level)}
                 style={[
                   styles.switcherDot,
                   {

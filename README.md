@@ -1,262 +1,521 @@
-MaternAlert Arkansas
-Improving Maternal and Infant Health in Rural Arkansas
-MaternAlert Arkansas is a proposed smart maternal health support system designed to help pregnant mothers in rural Arkansas get care earlier, especially when they live far from hospitals or have limited access to transportation and specialists.
+# Materna
 
-The system combines a wearable bracelet, a mobile app, an AI symptom assistant, remote vitals monitoring, emergency alerts, and a hospital dashboard. The goal is not to replace doctors, but to help mothers and care teams recognize warning signs sooner and respond faster.
+**Two hearts, one wrist.**
 
-Challenge Background
-Arkansas has one of the highest maternal mortality rates in the United States. Many rural counties do not have nearby labor and delivery services, and some hospitals have stopped offering maternity care. Pregnant women in rural areas may need to travel 45 minutes or more to reach a delivery hospital.
+Materna is an Expo React Native mobile prototype for improving maternal and
+infant health coordination in rural Arkansas. It connects a patient-facing
+pregnancy monitoring experience with a linked doctor dashboard.
 
-Major barriers include:
+The prototype demonstrates how wearable vital signs, patient-reported
+symptoms, pregnancy history, emergency alerts, care navigation, and shared
+reports could help identify risk earlier and connect rural mothers with care.
 
-Long distance from hospitals
-Lack of transportation
-Shortage of obstetric providers
-Fragmented care coordination
-Late detection of high-risk symptoms
-Limited access to preventive care
-MaternAlert Arkansas is designed to reduce these barriers through telehealth, remote monitoring, and care navigation.
+> Materna is a hackathon prototype. It is not a medical device, diagnostic
+> system, emergency service, or substitute for professional medical care.
 
-Project Goal
-The goal of this project is to create a web and mobile health platform that:
+## Problem
 
-Tracks pregnancy-related health risks
-Monitors vital signs through a smart bracelet or wearable device
-Allows mothers to report symptoms through an AI chat assistant
-Sends alerts to hospitals or care teams when danger signs appear
-Helps rural mothers connect with doctors, nurses, and emergency services faster
-Main Users
-Pregnant mothers
-Doctors and nurses
-Hospitals and clinics
-Emergency responders
-Community health workers
-Care coordinators
-Core Features
-1. Mother Login and Profile
-The mother creates a profile with important pregnancy and health information.
+Many pregnant people in rural Arkansas face:
 
-Example profile questions:
+- Long travel times to labor and delivery services
+- Maternity care deserts and hospital service closures
+- Transportation barriers
+- Obstetric workforce shortages
+- Fragmented patient, clinic, and hospital communication
+- Delayed recognition of worsening symptoms
 
-Age
-Weight and height
-Pregnancy week
-Previous pregnancies
-Previous miscarriage
-History of high blood pressure
-Diabetes or gestational diabetes
-Heart disease
-Anemia
-C-section history
-Current medications
-Distance from nearest hospital
-Emergency contact
-Preferred hospital or clinic
-This information helps the system identify mothers who may be at higher risk.
+Materna explores a connected workflow in which a bracelet collects health
+signals, the patient reports symptoms through the app, and the care team sees
+prioritized alerts and supporting information.
 
-2. Smart Bracelet or Wearable Device
-The bracelet or wearable device can track health data such as:
+## Product Overview
 
-Blood pressure
-Heart rate
-Oxygen level
-Body temperature
-Activity level
-Sleep pattern
-Fall detection, optional
-The wearable sends this information to the mobile app and hospital dashboard.
+Materna has two experiences inside one mobile application.
 
-3. Vitals Dashboard
-The app shows the mother and care team important health readings.
+### Patient Experience
 
-Example vitals:
+- Animated Materna welcome screen
+- Patient or doctor role selection
+- Light and dark themes
+- Green, yellow, and red risk demonstrations
+- Bracelet status and vital-sign cards
+- AI pregnancy symptom assistant
+- Emergency activation with a cancellation countdown
+- Nearby hospital and emergency-care navigation
+- Searchable list of all 75 Arkansas counties
+- Patient profile and pregnancy history
+- Automatic weekly pregnancy-week advancement
+- Patient-approved PDF health report
+- Early-risk review based on profile and chat warning signals
 
-Blood pressure: 145/95
-Heart rate: 105 bpm
-Oxygen level: 96%
-Temperature: 99.1 F
-Pregnancy week: 32 weeks
-The system can mark readings as normal, warning, or emergency.
+### Doctor Experience
 
-4. AI Symptom Assistant
-The AI assistant allows the mother to type or speak symptoms into the app.
+- Clinical overview and priority queue
+- Patient search and patient detail pages
+- Emergency alert popup and persistent alert banner
+- Current vitals and contact information
+- Profile and pregnancy-history review
+- Early high-risk review flags with contributing reasons
+- Shared PDF report history
+- Preloaded sample reports for presentation reliability
+- Editable doctor profile
+- Home, Patients, Reports, and Profile navigation
 
-Example symptoms:
+## Current Prototype Status
 
-Severe headache
-Blurry vision
-Swelling in face or hands
-Chest pain
-Shortness of breath
-Heavy bleeding
-Dizziness or fainting
-Reduced baby movement
-Jaw, neck, or arm discomfort
-The AI assistant can ask follow-up questions, summarize the symptoms, and send the information to the linked hospital or clinic.
+### Implemented
 
-Important safety note: The AI should not diagnose the mother. It should guide, document, and alert the care team when symptoms may be serious.
+- Expo SDK 54 React Native application
+- Android, iOS through Expo Go, and limited web support
+- Responsive mobile interface
+- Device-local profile storage with AsyncStorage
+- Date-of-birth month, day, and year selectors
+- Required-field validation before generating a PDF
+- PDF generation and native share sheet
+- Materna logo, patient data, bracelet snapshot, and risk summary in PDFs
+- AI API integration with a local safety-oriented fallback
+- Cross-device emergency demo using the configured API
+- Native map, location permission, hospital markers, and moving demo ambulances
+- Doctor dashboard sample and live report merging
 
-5. Risk Detection System
-The system combines:
+### Simulated or Demonstration Data
 
-Wearable vitals
-Mother profile
-Pregnancy history
-Reported symptoms
-Distance from hospital
-Risk levels:
+- Bracelet and sensor readings
+- Bluetooth connection
+- Ambulance movement and availability
+- Hospital bed and department availability
+- Green, yellow, and red clinical scenarios
+- Some patients and doctor reports
+- Travel-time estimates
 
-Green: Normal
-Yellow: Needs monitoring
-Orange: Contact care team soon
-Red: Emergency alert
-Example red alert situations:
+### Not Yet Production Ready
 
-Very high blood pressure
-Severe headache with blurry vision
-Heavy bleeding
-Trouble breathing
-Fainting
-Seizure symptoms
-Very low oxygen level
-Sudden decrease in baby movement
-6. Emergency Button
-The mobile app includes an emergency button that allows the mother to quickly request help.
+- Real Bluetooth Low Energy bracelet integration
+- Clinically validated alert thresholds or predictive model
+- Real hospital capacity feeds
+- Real ambulance dispatch
+- Secure authentication and role management
+- Encrypted backend database
+- HIPAA compliance assessment
+- Push notifications when the app is closed
+- Audit logs, consent versioning, and clinical governance
+- FDA or other medical-device regulatory review
 
-The emergency button can:
+## Technology
 
-Alert the linked hospital
-Notify an emergency contact
-Call emergency services
-Share the mother's location
-Send recent vitals and symptoms to the care team
-For a prototype, this can be shown as a simulated alert on the hospital dashboard.
+| Area | Technology |
+| --- | --- |
+| Mobile app | React Native 0.81 |
+| Framework | Expo SDK 54 |
+| Language | JavaScript and TypeScript |
+| Local storage | AsyncStorage |
+| Maps and location | react-native-maps, expo-location |
+| PDF reports | expo-print, expo-sharing, expo-file-system |
+| Icons | lucide-react-native |
+| API client | Fetch API |
+| Demo server | Node.js, Express, CORS |
+| Remote AI service | Configured FastAPI/ngrok endpoint |
 
-7. Hospital Dashboard
-The hospital dashboard helps doctors, nurses, and care coordinators monitor patients.
+## Quick Start
 
-Dashboard pages:
+### Requirements
 
-Hospital login
-Patient list
-High-risk alerts
-Live vitals
-Patient profile
-Symptom reports
-AI chat summaries
-Emergency alerts
-Care team notes
-Appointment tracking
-Dashboard actions:
+- Node.js 18 or newer
+- npm
+- Expo Go with SDK 54 support
+- A phone and development computer on the same Wi-Fi for LAN mode
 
-View patient risk level
-Sort patients by urgency
-Contact mother
-Review symptoms and vitals
-Send telehealth appointment link
-Escalate to emergency response
-How the System Reduces Rural Health Barriers
-Distance
-Telehealth and remote monitoring reduce the need for mothers to travel long distances for every concern. Routine check-ins, symptom reviews, and follow-ups can happen from home or a nearby clinic.
+### Install
 
-Transportation
-Many rural mothers may not have reliable transportation. The app helps them connect with care teams remotely and receive guidance before deciding whether travel is needed.
+```powershell
+git clone <repository-url>
+cd Hackathon-1
+npm install
+```
 
-Workforce Shortages
-Remote monitoring helps limited doctors and nurses focus first on the patients with the highest risk. The dashboard makes it easier to manage multiple patients and catch warning signs early.
+### Start Expo
 
-Care Coordination
-The system connects mothers, hospitals, clinics, emergency contacts, and care coordinators in one place. This reduces confusion and helps make sure important information is not lost.
+```powershell
+npx expo start --clear
+```
 
-Web App Roadmap
-Phase 1: Research and Planning
-Define the problem in rural Arkansas
-Identify maternal health warning signs
-List the users of the system
-Decide what data the app and bracelet should collect
-Define risk levels: green, yellow, orange, red
-Phase 2: Basic Web App Pages
-Create simple pages for:
+Scan the QR code with Expo Go.
 
-Login
-Mother profile form
-Vitals page
-AI chat page
-Emergency button
-Hospital dashboard
-Patient details
-Alerts
-Phase 3: Prototype With Sample Data
-Use sample patient data before connecting a real bracelet.
+If QR scanning does not work, confirm that the phone and computer use the same
+Wi-Fi. In Expo Go, manually enter:
 
-Example:
+```text
+exp://YOUR_COMPUTER_IP:8081
+```
 
-Patient: 32 weeks pregnant
-Blood pressure: 150/98
-Symptoms: headache and blurry vision
-Risk level: Red
-Action: Alert hospital dashboard
-Phase 4: AI Chat Prototype
-Build a simple chat interface where the mother can enter symptoms.
+Find the computer IP on Windows with:
 
-Example:
+```powershell
+ipconfig
+```
 
-Mother: "I have a bad headache and my vision is blurry."
+Use the IPv4 address under the active Wi-Fi adapter.
 
-AI assistant: "These symptoms may need urgent medical attention during pregnancy. I am sending an alert to your care team. If symptoms feel severe, call emergency services now."
+### Available Commands
 
-Hospital dashboard summary:
+```powershell
+npm start
+npm run android
+npm run ios
+npm run web
+```
 
-"Patient reports severe headache and blurry vision. Possible urgent pregnancy warning sign. Recent blood pressure is high."
+`npm run android` requires Android Studio, an Android SDK, and `adb`. Expo Go
+does not require Android Studio.
 
-Phase 5: Hospital Dashboard Prototype
-Show a patient list with:
+## Running the Local Demo Server
 
-Name
-Pregnancy week
-Latest vitals
-Risk level
-Alert reason
-Contact button
-Emergency escalation button
-Phase 6: Wearable Integration
-Later, connect the app to:
+The repository includes an Express demo server:
 
-Smartwatch data
-Bluetooth blood pressure monitor
-Pulse oximeter
-Custom bracelet sensors
-For the first demo, wearable data can be simulated.
+```powershell
+node backend/server.js
+```
 
-Phase 7: Privacy and Safety
-Because this project involves health information, future versions should include:
+It listens on port `5000`.
 
-Secure login
-Encrypted patient data
-Permission-based access for hospital staff
-HIPAA-aware design
-Clear AI safety message
-Human medical review for serious alerts
-Minimum Viable Product
-For the first version, the team can build:
+For a physical phone, do not use `localhost` as the API address. Update
+`src/config/config.js` to use the computer's LAN address:
 
-Mother login
-Pregnancy risk profile form
-Vitals page with sample wearable data
-AI symptom chat
-Emergency button
-Hospital dashboard showing alerts
-This is enough to demonstrate how the system works and how it could help rural mothers get care faster.
+```js
+export const MATERNA_URL = "http://YOUR_COMPUTER_IP:5000";
+```
 
-Team 5
+Both phones must be able to reach that address. Windows Firewall may request
+permission for Node.js; allow access on the active network.
+
+The configured public ngrok URL is temporary and may expire or expose a
+different backend version. Replace it when the tunnel changes.
+
+## API Configuration
+
+API settings are located in:
+
+```text
+src/config/config.js
+```
+
+The prototype defines:
+
+- `MATERNA_URL`
+- Shared JSON/ngrok headers
+- Demo doctor Basic Authentication credentials
+
+The credentials are intentionally hardcoded for the hackathon demonstration.
+They must never be used in a production application.
+
+### Remote AI API
+
+The API client supports:
+
+- `POST /ingest`
+- `POST /assist`
+- `GET /patients`
+- `GET /history/:patientId`
+- `GET /conversations/:patientId`
+
+### Express Demo API
+
+The included Node server supports:
+
+- `GET /`
+- `POST /risk`
+- `POST /vitals`
+- `GET /vitals`
+- `POST /reports`
+- `GET /reports`
+- `POST /emergency-alerts`
+- `GET /emergency-alerts`
+- `POST /emergency-alerts/:alertId/acknowledge`
+
+Reports and emergency alerts are stored in memory and disappear when the
+server restarts.
+
+## Emergency Alert Flow
+
+1. The patient opens the Emergency screen.
+2. The patient taps the large emergency button.
+3. A three-second countdown allows cancellation.
+4. Materna sends the patient ID, name, pregnancy week, location label, and
+   bracelet snapshot.
+5. The doctor dashboard checks for alerts every two seconds.
+6. The doctor sees a popup and persistent red banner.
+7. The doctor acknowledges the alert.
+
+If the configured server does not implement `/emergency-alerts`, the prototype
+uses a structured emergency event through the existing AI conversation API.
+This compatibility fallback is intended only for the hackathon demo.
+
+The emergency UI does not contact real emergency services automatically.
+Users should call 911 during an actual emergency.
+
+## Patient Profile and Reports
+
+Profile data is stored locally with AsyncStorage.
+
+Required before a PDF can be created:
+
+- Full name
+- Date of birth
+- County
+- Age
+- Pregnancy week
+- Emergency contact
+
+Additional profile fields include:
+
+- Weight and height
+- Previous pregnancies
+- Miscarriage history
+- High blood pressure
+- Diabetes
+- Anemia
+- Previous C-section
+- Medications
+- Preferred hospital or clinic
+- Permission to share with the linked doctor
+
+The pregnancy week advances by one after each complete seven-day interval. If
+the patient edits the week manually, that date becomes the new tracking point.
+The value is capped at week 42.
+
+The generated PDF includes:
+
+- Materna logo
+- Report date
+- Patient and pregnancy information
+- Bracelet status and battery
+- Current vital-sign snapshot
+- Medical history
+- Emergency and preferred-care contacts
+- Current risk state
+- Explainable early-risk review reasons
+- Medical-use disclaimer
+
+## Early-Risk Review
+
+Materna combines demonstration signals from:
+
+- Patient-entered profile history
+- Maternal age
+- High blood pressure or diabetes history
+- Miscarriage, anemia, and C-section history
+- Warning phrases entered in AI chat
+- Current demonstration bracelet scenario
+
+Examples of chat signals include:
+
+- Chest, jaw, or breathing symptoms
+- Bleeding or spotting
+- Vision changes
+- Sudden swelling
+- Severe headache
+- Reduced fetal movement
+
+The doctor dashboard labels the result as an **early review flag**, not a
+diagnosis, and displays the contributing reasons.
+
+## AI Symptom Assistant
+
+`AIChatScreen.tsx` sends messages to the configured `/assist` API. It:
+
+- Prevents duplicate submissions
+- Shows a loading indicator
+- Waits up to 90 seconds for the remote API
+- Uses a local keyword-based fallback when the server is unavailable
+- Records important warning signals for risk review
+- Can share consented warning signals with the linked doctor workflow
+
+The assistant should not be described as diagnosing a condition. Its purpose
+is symptom documentation, safety guidance, and escalation.
+
+## Hospital and Care Navigation
+
+The Hospitals screen includes:
+
+- Live-location permission
+- Native map on iOS and Android
+- Hospital and ambulance markers
+- Demo moving ambulance locations
+- Search across all 75 Arkansas counties
+- Labor and delivery and emergency-department availability cards
+- Direct call and Google Maps directions
+- Haversine distance calculation
+- Estimated road mileage and travel time
+- Emergency-department prioritization during a red scenario
+
+Only a small set of hospital records currently contains demo availability and
+coordinates. Selecting another county may correctly show that no listed care
+is available. Production use would require verified statewide data feeds.
+
+## Doctor Dashboard Demo Data
+
+The doctor dashboard starts with sample reports for:
+
+- Maya Johnson
+- Maria Gonzalez
+- Tanya Williams
+
+Sample reports are marked `SAMPLE`. A newly shared report is marked `LIVE` and
+replaces the sample report for the same patient.
+
+This design keeps the dashboard useful during a presentation even when the
+network is unavailable.
+
+## Project Structure
+
+```text
+Hackathon-1/
+|-- App.js                         Main app state and role selection
+|-- app.json                       Expo name, icon, and platform settings
+|-- index.js                       Expo entry point
+|-- assets/
+|   `-- materna-app-icon.png       App and PDF logo
+|-- backend/
+|   |-- riskCalculator.js          Demo rule-based risk score
+|   `-- server.js                  Express demo API
+|-- src/
+|   |-- api/
+|   |   `-- maternaAPI.js          API requests and compatibility fallbacks
+|   |-- components/
+|   |   |-- HospitalMap.native.tsx Native map implementation
+|   |   |-- HospitalMap.web.tsx    Web fallback
+|   |   `-- ...                    Shared UI components
+|   |-- config/
+|   |   `-- config.js              API URL, headers, demo credentials
+|   |-- data/
+|   |   |-- sampleSensorData.ts    Green, yellow, and red scenarios
+|   |   `-- ...                    Additional demo data
+|   |-- screens/
+|   |   |-- AIChatScreen.tsx
+|   |   |-- HomeScreen.tsx
+|   |   |-- HospitalsScreen.tsx
+|   |   |-- VitalsScreen.tsx
+|   |   |-- emergencyscreen.tsx
+|   |   |-- profilescreen.tsx
+|   |   `-- doctor/
+|   |       `-- DoctorWorkspace.tsx
+|   |-- storage/
+|   |   |-- chatRiskStorage.ts
+|   |   `-- profileStorage.ts
+|   |-- styles/
+|   `-- utils/
+|       |-- maternalRiskAssessment.ts
+|       `-- profileReport.ts
+|-- package.json
+|-- tsconfig.json
+`-- README.md
+```
+
+Some earlier experimental screens and HTML design references remain in the
+repository but are not part of the primary `App.js` navigation.
+
+## Verification
+
+Check TypeScript:
+
+```powershell
+.\node_modules\.bin\tsc.cmd --noEmit --pretty false
+```
+
+Build an Android export:
+
+```powershell
+npx expo export --platform android --output-dir .expo-export-test --clear
+```
+
+Check backend syntax:
+
+```powershell
+node --check backend/server.js
+```
+
+Before presenting, test:
+
+- Patient and doctor phones can reach the same API
+- AI response or fallback appears
+- Emergency alert reaches the doctor
+- Location permission works
+- PDF generation opens the share sheet
+- A backup screen recording is available
+
+## Recommended Four-Minute Demo
+
+1. Select Patient from the role screen.
+2. Introduce Maya with green, stable readings.
+3. Move to yellow and red to show worsening patterns.
+4. Enter chest pain or breathing trouble in Ask Materna.
+5. Activate Emergency and complete the countdown.
+6. Show the alert arriving on the doctor's phone.
+7. Open Maya's report for care context.
+8. Show emergency-care navigation.
+
+Core message:
+
+> Materna connects continuous monitoring, patient-reported symptoms, and
+> care-team coordination so rural mothers can recognize risk and reach care
+> earlier.
+
+## Production Roadmap
+
+### Clinical and Research
+
+- Establish clinical advisory leadership
+- Validate warning thresholds with obstetric specialists
+- Conduct usability research with rural patients
+- Define escalation protocols and human-review requirements
+- Run an approved pilot with a healthcare partner
+
+### Hardware
+
+- Select and validate bracelet sensors
+- Implement Bluetooth Low Energy pairing
+- Handle calibration, battery, disconnection, and missing data
+- Validate signal quality across skin tones and real-world conditions
+
+### Platform
+
+- Replace in-memory storage with a secure database
+- Add real authentication and organization roles
+- Encrypt data in transit and at rest
+- Add push notifications
+- Add audit history and clinician notes
+- Integrate with EHR systems using standards such as FHIR
+- Use verified hospital, service, and transportation data
+
+### Safety, Privacy, and Regulation
+
+- Complete HIPAA security and privacy review
+- Define data retention and patient-consent policies
+- Perform threat modeling and penetration testing
+- Review FDA medical-device implications
+- Add accessibility and language support
+- Establish incident response and clinical oversight
+
+## Team 5
+
 Challenge 05: Improving Rural Maternal Health
 
-Kshitiz Khatiwada: Data ETL Processes, Research Analysis, Tech
-Pronita Ghimire: UI Design, Public Speaking, Creative
-Garay Gulmammadov: Web and Graphic Design, Presentation, Creative
-Alyson Chapman: Engineering, Neural Networks, Tech
-Ivonne Barbosa-Melgarejo: Health Data Analysis, Storytelling, Creative
-Ali Rizwan: Python Coding, Logical Problem-solving, Tech
-Isidora Adeola: Health Info Education, App UI, Creative
-Main Message
-MaternAlert Arkansas does not replace doctors. It helps rural mothers reach doctors faster, detect warning signs earlier, and receive better support before symptoms become life-threatening.
+- Kshitiz Khatiwada: Data ETL, research analysis, technology
+- Pronita Ghimire: UI design, public speaking, creative direction
+- Garay Gulmammadov: Web and graphic design, presentation
+- Alyson Chapman: Engineering, neural networks
+- Ivonne Barbosa-Melgarejo: Health data analysis, storytelling
+- Ali Rizwan: Python development, logical problem solving
+- Isidora Adeola: Health information education, application UI
+
+Challenge author: Allan Nichols, CEO of Mainline Health Systems, Inc.
+
+Coaches: Alese Johnston, Tim Reardon, and Allison Thompson.
+
+## Safety Disclaimer
+
+Materna currently uses simulated data and unvalidated rules. It must not be
+used to make real clinical decisions. In an emergency, call 911 or the
+appropriate local emergency number. Any production version would require
+clinical validation, secure infrastructure, regulatory review, and formal
+partnerships with healthcare organizations.

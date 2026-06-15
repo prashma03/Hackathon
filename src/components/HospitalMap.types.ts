@@ -12,4 +12,6 @@ export interface HospitalMapProps {
   hospitals: MapPoint[];
   ambulances: MapPoint[];
   linkedHospitalId: string;
+  selectedHospitalId?: string | null;
+  onSelectHospital?: (hospitalId: string) => void;
 }

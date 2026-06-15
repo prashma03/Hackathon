@@ -17,8 +17,13 @@ export default function HospitalMap({
   hospitals,
   ambulances,
   linkedHospitalId,
+  selectedHospitalId,
+  onSelectHospital,
 }: HospitalMapProps) {
-  const destination = hospitals[0];
+  const destination =
+    hospitals.find((hospital) => hospital.id === selectedHospitalId) ||
+    hospitals.find((hospital) => hospital.id === linkedHospitalId) ||
+    hospitals[0];
 
   return (
     <MapView
@@ -37,6 +42,7 @@ export default function HospitalMap({
           key={hospital.id}
           coordinate={{ latitude: hospital.lat, longitude: hospital.lng }}
           title={hospital.name}
+          onPress={() => onSelectHospital?.(hospital.id)}
         >
           <View
             style={[
@@ -44,7 +50,10 @@ export default function HospitalMap({
               {
                 borderColor: accent,
                 backgroundColor:
-                  hospital.id === linkedHospitalId ? accent : "#ffffff",
+                  hospital.id === selectedHospitalId ||
+                  hospital.id === linkedHospitalId
+                    ? accent
+                    : "#ffffff",
               },
             ]}
           >

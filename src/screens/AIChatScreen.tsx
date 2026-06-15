@@ -10,7 +10,14 @@ import {
   Platform,
   ActivityIndicator,
 } from "react-native";
-import { askAssistant } from "../api/maternaAPI";
+import { askAssistant, shareProfileReport } from "../api/maternaAPI";
+import {
+  loadChatRiskSignals,
+  recordChatRiskSignal,
+} from "../storage/chatRiskStorage";
+import { loadProfile } from "../storage/profileStorage";
+import { assessMaternalRisk } from "../utils/maternalRiskAssessment";
+import { sampleSensorData } from "../data/sampleSensorData";
 
 interface Props {
   theme: "dark" | "light";
@@ -56,6 +63,20 @@ const RESPONSES: { keywords: string[]; reply: string; alert?: boolean }[] = [
     reply: "Tracking baby movement is important. If you notice significantly fewer kicks than usual or no movement for several hours, contact your doctor right away. You can do a kick count — 10 movements in 2 hours is a good sign.",
   },
   {
+    keywords: [
+      "jaw",
+      "chest pain",
+      "chest pressure",
+      "shortness of breath",
+      "can't breathe",
+      "cannot breathe",
+      "trouble breathing",
+    ],
+    reply:
+      "Jaw pain with chest discomfort, shortness of breath, sweating, dizziness, or nausea can be an emergency. Call 911 now and do not drive yourself. If the jaw pain is isolated and mild, contact your healthcare provider promptly for advice.",
+    alert: true,
+  },
+  {
     keywords: ["pain", "cramp", "cramping", "stomach", "belly"],
     reply: "⚠️ Severe or persistent abdominal pain during pregnancy should not be ignored. If the pain is sharp, constant, or comes with bleeding or fever, go to the hospital immediately.",
     alert: true,
@@ -88,7 +109,14 @@ function getResponse(input: string): { reply: string; alert?: boolean } {
   return { reply: FALLBACK };
 }
 
-export default function AIChatScreen({ theme, onClose, name, patientId = "patient_maya", currentSensors = null, riskLevel = "stable" }: Props) {
+export default function AIChatScreen({
+  theme,
+  onClose,
+  name,
+  patientId = "patient_maya",
+  currentSensors = null,
+  riskLevel = "stable",
+}: Props) {
   const dark = theme === "dark";
   const c = dark ? colors.dark : colors.light;
 
@@ -116,26 +144,38 @@ export default function AIChatScreen({ theme, onClose, name, patientId = "patien
     setMessages((prev) => [...prev, userMsg]);
     setInput("");
     setIsLoading(true);
+    const riskSignal = await recordChatRiskSignal(trimmed);
+    if (riskSignal) {
+      const profile = await loadProfile();
+      if (profile?.shareWithDoctor) {
+        const chatSignals = await loadChatRiskSignals();
+        await shareProfileReport({
+          patient_id: patientId,
+          profile,
+          bracelet: sampleSensorData.bracelet,
+          vitals: sampleSensorData.vitals,
+          risk: sampleSensorData.risk,
+          earlyRiskAssessment: assessMaternalRisk(profile, chatSignals),
+          chatSignals,
+        });
+      }
+    }
     setTimeout(() => scrollRef.current?.scrollToEnd({ animated: true }), 100);
 
-    const apiResponse = await askAssistant(patientId, trimmed, currentSensors, riskLevel);
+    const apiReply = await askAssistant(
+      patientId,
+      trimmed,
+      currentSensors,
+      riskLevel
+    );
+    const fallback = getResponse(trimmed);
 
-    let botMsg: Message;
-    if (apiResponse && !apiResponse.startsWith("Unable to reach") && !apiResponse.startsWith("The assistant is taking")) {
-      botMsg = {
-        id: (Date.now() + 1).toString(),
-        from: "materna",
-        text: apiResponse,
-      };
-    } else {
-      const { reply, alert } = getResponse(trimmed);
-      botMsg = {
-        id: (Date.now() + 1).toString(),
-        from: "materna",
-        text: reply,
-        alert,
-      };
-    }
+    const botMsg: Message = {
+      id: (Date.now() + 1).toString(),
+      from: "materna",
+      text: apiReply || fallback.reply,
+      alert: apiReply ? false : fallback.alert,
+    };
 
     setIsLoading(false);
     setMessages((prev) => [...prev, botMsg]);
@@ -189,8 +229,16 @@ export default function AIChatScreen({ theme, onClose, name, patientId = "patien
           </View>
         ))}
         {isLoading && (
-          <View style={[styles.bubble, styles.botBubble, { backgroundColor: c.botBubble }]}>
-            <Text style={[styles.senderLabel, { color: c.textMuted }]}>Materna</Text>
+          <View
+            style={[
+              styles.bubble,
+              styles.botBubble,
+              { backgroundColor: c.botBubble },
+            ]}
+          >
+            <Text style={[styles.senderLabel, { color: c.textMuted }]}>
+              Materna
+            </Text>
             <ActivityIndicator size="small" color={c.accent} />
           </View>
         )}
@@ -214,7 +262,13 @@ export default function AIChatScreen({ theme, onClose, name, patientId = "patien
           multiline
         />
         <TouchableOpacity
-          style={[styles.sendBtn, { backgroundColor: input.trim() && !isLoading ? c.accent : c.inputBorder }]}
+          style={[
+            styles.sendBtn,
+            {
+              backgroundColor:
+                input.trim() && !isLoading ? c.accent : c.inputBorder,
+            },
+          ]}
           onPress={handleSend}
           disabled={!input.trim() || isLoading}
         >

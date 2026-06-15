@@ -10,6 +10,9 @@ import {
   Animated,
   Alert,
 } from "react-native";
+import { sendEmergencyAlert } from "../api/maternaAPI";
+import { sampleSensorData } from "../data/sampleSensorData";
+import { loadProfile } from "../storage/profileStorage";
 
 interface Props {
   theme: "dark" | "light";
@@ -42,6 +45,10 @@ export default function EmergencyScreen({ theme, onClose }: Props) {
   const [bedReserved, setBedReserved] = useState(false);
   const [ambulanceCalled, setAmbulanceCalled] = useState(false);
   const [countdown, setCountdown] = useState(3);
+  const [doctorAlertStatus, setDoctorAlertStatus] = useState<
+    "idle" | "sending" | "sent" | "failed"
+  >("idle");
+  const alertSent = useRef(false);
 
   // Pulse animation for emergency button
   const pulse = useRef(new Animated.Value(1)).current;
@@ -60,13 +67,33 @@ export default function EmergencyScreen({ theme, onClose }: Props) {
     if (phase !== "activating") return;
     if (countdown === 0) {
       setPhase("active");
+      notifyDoctor();
       return;
     }
     const t = setTimeout(() => setCountdown((c) => c - 1), 1000);
     return () => clearTimeout(t);
   }, [phase, countdown]);
 
+  async function notifyDoctor() {
+    if (alertSent.current) return;
+    alertSent.current = true;
+    setDoctorAlertStatus("sending");
+    const profile = await loadProfile();
+    const result = await sendEmergencyAlert({
+      patient_id: "patient_001",
+      patient_name: profile?.fullName || "Maya Johnson",
+      pregnancy_week: profile?.pregnancyWeek || 28,
+      location: profile?.county
+        ? `${profile.county} County, Arkansas`
+        : "Location unavailable",
+      vitals: sampleSensorData.vitals,
+    });
+    setDoctorAlertStatus(result ? "sent" : "failed");
+  }
+
   function handleEmergencyPress() {
+    alertSent.current = false;
+    setDoctorAlertStatus("idle");
     setPhase("activating");
     setCountdown(3);
   }
@@ -174,6 +201,15 @@ export default function EmergencyScreen({ theme, onClose }: Props) {
             <View style={styles.alertBanner}>
               <Text style={styles.alertBannerText}>
                 🚨 Emergency activated · Hospital notified · Contacts alerted
+              </Text>
+              <Text style={styles.alertBannerStatus}>
+                {doctorAlertStatus === "sending"
+                  ? "Sending alert to linked doctor..."
+                  : doctorAlertStatus === "sent"
+                  ? "Linked doctor notified successfully"
+                  : doctorAlertStatus === "failed"
+                  ? "Doctor alert could not be delivered. Call 911 now."
+                  : "Preparing doctor notification..."}
               </Text>
             </View>
 
@@ -388,6 +424,7 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   alertBannerText: { color: "#fff", fontWeight: "700", fontSize: 13, textAlign: "center" },
+  alertBannerStatus: { color: "#fee2e2", fontSize: 11, textAlign: "center", marginTop: 5 },
   sectionLabel: { fontSize: 11, fontWeight: "700", letterSpacing: 2, marginBottom: 10 },
   hospitalCard: { borderWidth: 2, borderRadius: 16, padding: 16, marginBottom: 24 },
   hospitalTop: { flexDirection: "row", alignItems: "flex-start", marginBottom: 8 },

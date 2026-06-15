@@ -6,11 +6,15 @@ const PROFILE_KEY = "@materna_profile";
 
 // Profile information that will be saved
 export interface ProfileData {
+  fullName: string;
+  dateOfBirth: string;
+  county: string;
   age: string;
   weightLbs: string;
   heightFt: string;
   heightIn: string; 
   pregnancyWeek: string;
+  pregnancyWeekRecordedAt: string;
   previousPregnancies: string;
   medications: string;
   emergencyContact: string;
@@ -21,7 +25,32 @@ export interface ProfileData {
   hasDiabetes: boolean;
   hasAnemia: boolean;
   hasCSection: boolean;
+  shareWithDoctor: boolean;
+  updatedAt: string;
 }
+
+export const EMPTY_PROFILE: ProfileData = {
+  fullName: "",
+  dateOfBirth: "",
+  county: "",
+  age: "",
+  weightLbs: "",
+  heightFt: "",
+  heightIn: "",
+  pregnancyWeek: "",
+  pregnancyWeekRecordedAt: "",
+  previousPregnancies: "",
+  medications: "",
+  emergencyContact: "",
+  preferredHospital: "",
+  hasMiscarriage: false,
+  hasHighBP: false,
+  hasDiabetes: false,
+  hasAnemia: false,
+  hasCSection: false,
+  shareWithDoctor: false,
+  updatedAt: "",
+};
 
 // Save the user's profile
 export const saveProfile = async (profile: ProfileData) => {
@@ -36,6 +65,26 @@ export const saveProfile = async (profile: ProfileData) => {
   }
 };
 
+function advancePregnancyWeek(profile: ProfileData): ProfileData {
+  const savedWeek = Number(profile.pregnancyWeek);
+  if (!savedWeek || !profile.pregnancyWeekRecordedAt) return profile;
+
+  const recordedAt = new Date(profile.pregnancyWeekRecordedAt).getTime();
+  if (!Number.isFinite(recordedAt)) return profile;
+
+  const weekMs = 7 * 24 * 60 * 60 * 1000;
+  const elapsedWeeks = Math.floor((Date.now() - recordedAt) / weekMs);
+  if (elapsedWeeks < 1) return profile;
+
+  return {
+    ...profile,
+    pregnancyWeek: String(Math.min(42, savedWeek + elapsedWeeks)),
+    pregnancyWeekRecordedAt: new Date(
+      recordedAt + elapsedWeeks * weekMs
+    ).toISOString(),
+  };
+}
+
 // Load the saved profile
 export const loadProfile = async (): Promise<ProfileData | null> => {
   try {
@@ -44,7 +93,15 @@ export const loadProfile = async (): Promise<ProfileData | null> => {
 
     // If data exists, turn it back into an object
     if (data) {
-      return JSON.parse(data);
+      const stored = { ...EMPTY_PROFILE, ...JSON.parse(data) };
+      const updated = advancePregnancyWeek(stored);
+      if (
+        updated.pregnancyWeek !== stored.pregnancyWeek ||
+        updated.pregnancyWeekRecordedAt !== stored.pregnancyWeekRecordedAt
+      ) {
+        await AsyncStorage.setItem(PROFILE_KEY, JSON.stringify(updated));
+      }
+      return updated;
     }
 
     // No profile found
