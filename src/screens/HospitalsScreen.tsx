@@ -871,7 +871,7 @@ function getColors(mode: "dark" | "light") {
     background: dark ? "#0f1117" : "#f5f7fa",
     text: dark ? "#f0f0f0" : "#1a1a1a",
     textMuted: dark ? "#8a8fa8" : "#6b7280",
-    accent: "#6c63ff",
+    accent: "#22C55E",
     card: dark ? "#1c1f2e" : "#ffffff",
     cardBorder: dark ? "#2e3347" : "#e5e7eb",
   };
