@@ -183,7 +183,7 @@ function getColors(mode: "dark" | "light") {
     background: isDark ? "#0f1117" : "#f5f7fa",
     text: isDark ? "#f0f0f0" : "#1a1a1a",
     textMuted: isDark ? "#8a8fa8" : "#6b7280",
-    accent: "#6c63ff",
+    accent: "#22C55E",
     card: isDark ? "#1c1f2e" : "#ffffff",
     cardBorder: isDark ? "#2e3347" : "#e5e7eb",
     secondaryBtn: isDark ? "#2e3347" : "#e5e7eb",
