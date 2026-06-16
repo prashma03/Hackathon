@@ -161,17 +161,17 @@ export default function App() {
 
           {/* Doctor login */}
           <Pressable
-            style={[login.loginBtn, { borderColor: "#6c63ff", backgroundColor: "#0d0b1a" }]}
+            style={[login.loginBtn, { borderColor: "#15803d", backgroundColor: "#0a1a0f" }]}
             onPress={() => setUserType("doctor")}
           >
             <Text style={login.loginBtnIcon}>🩺</Text>
             <View style={{ flex: 1 }}>
-              <Text style={[login.loginBtnTitle, { color: "#6c63ff" }]}>I'm a Doctor</Text>
+              <Text style={[login.loginBtnTitle, { color: "#15803d" }]}>I'm a Doctor</Text>
               <Text style={login.loginBtnSub}>Monitor patients, manage alerts, view dashboard</Text>
             </View>
-            <Text style={{ color: "#6c63ff", fontSize: 20 }}>›</Text>
+            <Text style={{ color: "#15803d", fontSize: 20 }}>›</Text>
           </Pressable>
-
+          
           <Text style={login.footer}>
             Materna · Hackathon Demo · Arkansas Rural Health
           </Text>
