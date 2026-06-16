@@ -50,7 +50,7 @@ export default function DoctorLoginScreen({ theme, onLogin, onBack }: Props) {
     border: isDark ? "#242B33" : "#E2E8F0",
     text:   isDark ? "#F8FAFC" : "#0F172A",
     muted:  isDark ? "#64748B" : "#94A3B8",
-    purple: "#6c63ff",
+    purple: "#22C55E",
   };
 
   const [email, setEmail]       = useState("");

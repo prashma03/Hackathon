@@ -506,7 +506,7 @@ function HomeView({
       </Text>
 
       <View style={styles.statRow}>
-        <Stat label="Patients" value={patients.length} color="#6c63ff" c={c} />
+        <Stat label="Patients" value={patients.length} color="#1c8d80" c={c} />
         <Stat label="Critical" value={critical.length} color="#e11d48" c={c} />
         <Stat label="Reports" value={reports.length} color="#22C55E" c={c} />
       </View>
@@ -628,7 +628,7 @@ function PatientDetail({
 
       <View style={styles.quickActions}>
         <QuickAction icon={Phone} label="Call" color="#22C55E" onPress={() => Linking.openURL(`tel:${patient.phone.replace(/\D/g, "")}`)} />
-        <QuickAction icon={MessageCircle} label="Message" color="#6c63ff" onPress={() => Linking.openURL(`sms:${patient.phone.replace(/\D/g, "")}`)} />
+        <QuickAction icon={MessageCircle} label="Message" color="#1898a1" onPress={() => Linking.openURL(`sms:${patient.phone.replace(/\D/g, "")}`)} />
         <QuickAction icon={Mail} label="Email" color="#d97706" onPress={() => Linking.openURL(`mailto:${patient.email}`)} />
       </View>
 
@@ -907,7 +907,7 @@ const colors = {
     border: "#242B33",
     text: "#F8FAFC",
     muted: "#94A3B8",
-    purple: "#6c63ff",
+    purple: "#22C55E",
   },
   light: {
     background: "#F8FAFC",
@@ -915,7 +915,7 @@ const colors = {
     border: "#E2E8F0",
     text: "#0F172A",
     muted: "#64748B",
-    purple: "#5b52e8",
+    purple: "#16a34a",
   },
 };
 
@@ -932,7 +932,7 @@ const styles = StyleSheet.create({
   brandRow: { flexDirection: "row", alignItems: "center", gap: 7 },
   brandDot: { width: 8, height: 8, borderRadius: 4, backgroundColor: "#22C55E" },
   brand: { fontSize: 12, fontWeight: "900", letterSpacing: 2 },
-  portalBadge: { color: "#6c63ff", fontSize: 9, fontWeight: "800" },
+  portalBadge: { color: "#22C55E", fontSize: 9, fontWeight: "800" },
   doctorName: { fontSize: 17, fontWeight: "800", marginTop: 5 },
   doctorMeta: { fontSize: 11, marginTop: 2 },
   logout: { borderWidth: 1, borderRadius: 8, paddingHorizontal: 11, paddingVertical: 7, alignSelf: "center" },
@@ -994,12 +994,12 @@ const styles = StyleSheet.create({
   riskReviewTitle: { fontSize: 10, fontWeight: "900", marginBottom: 7 },
   riskDisclaimer: { fontSize: 9, lineHeight: 13, marginTop: 5 },
   profileHeading: { flexDirection: "row", alignItems: "center", gap: 12, marginBottom: 16 },
-  doctorAvatar: { width: 54, height: 54, borderRadius: 27, backgroundColor: "#6c63ff", alignItems: "center", justifyContent: "center" },
+  doctorAvatar: { width: 54, height: 54, borderRadius: 27, backgroundColor: "#22C55E", alignItems: "center", justifyContent: "center" },
   profileField: { marginBottom: 13 },
   profileLabel: { fontSize: 9, textTransform: "uppercase", fontWeight: "700" },
   profileValue: { fontSize: 13, fontWeight: "700", marginTop: 4 },
   profileInput: { borderWidth: 1, borderRadius: 7, paddingHorizontal: 10, paddingVertical: 8, marginTop: 4 },
-  editButton: { backgroundColor: "#6c63ff", borderRadius: 8, alignItems: "center", paddingVertical: 12 },
+  editButton: { backgroundColor: "#22C55E", borderRadius: 8, alignItems: "center", paddingVertical: 12 },
   editButtonText: { color: "#ffffff", fontSize: 12, fontWeight: "800" },
   bottomNav: {
     flexDirection: "row",
