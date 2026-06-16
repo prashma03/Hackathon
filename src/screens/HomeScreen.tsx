@@ -258,7 +258,7 @@ const styles = StyleSheet.create({
   themeButtonText: { fontSize: 11, fontWeight: "700" },
   brandRow: { flexDirection: "row", alignItems: "center", gap: 8, marginBottom: 10 },
   brandDot: { width: 10, height: 10, borderRadius: 99 },
-  brand: { fontSize: 14, fontWeight: "900", letterSpacing: 2 },
+  brand: { fontSize: 14, fontWeight: "900", letterSpacing: 2, fontFamily: "Qika-Bold" },
   week: { fontSize: 12, marginLeft: 4 },
   dotSwitcher: { flexDirection: "row", alignItems: "center", gap: 6, marginBottom: 12 },
   switcherDot: { height: 10, borderRadius: 5 },

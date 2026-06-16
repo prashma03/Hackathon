@@ -13,7 +13,7 @@ export default function HospitalMap({
       style={[
         styles.fallback,
         {
-          backgroundColor: dark ? "#141824" : "#eef2ff",
+          backgroundColor: dark ? "#141824" : "#e6f9f0",
           borderColor: accent,
         },
       ]}
