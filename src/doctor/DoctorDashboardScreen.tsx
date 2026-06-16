@@ -183,7 +183,7 @@ export default function DoctorDashboardScreen({ theme, doctor, navigate, onLogou
     muted:    isDark ? "#64748B" : "#94A3B8",
     soft:     isDark ? "#CBD5E1" : "#475569",
     green:    "#22C55E",
-    purple:   "#6c63ff",
+    purple:   "#20b858",
     rose:     "#e11d48",
     amber:    "#d97706",
   };
