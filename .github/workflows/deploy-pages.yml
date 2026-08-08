@@ -1,4 +1,4 @@
-﻿name: Deploy Expo web to GitHub Pages
+name: Deploy Expo web to GitHub Pages
 
 on:
   push:
@@ -39,7 +39,7 @@ jobs:
 
       - name: Use GitHub Pages subpath
         run: |
-          node -e "const fs = require('fs'); const file = 'dist/index.html'; let html = fs.readFileSync(file, 'utf8'); html = html.replace(/src=\"\/_expo\//g, 'src=\"/Hackathon/_expo/').replace(/href=\"\/_expo\//g, 'href=\"/Hackathon/_expo/'); fs.writeFileSync(file, html);"
+          node -e "const fs = require('fs'); const file = 'dist/index.html'; let html = fs.readFileSync(file, 'utf8'); html = html.replace(/src=\"\/(?:_expo|Materna\/_expo)\//g, 'src=\"/Hackathon/_expo/').replace(/href=\"\/(?:_expo|Materna\/_expo)\//g, 'href=\"/Hackathon/_expo/'); fs.writeFileSync(file, html);"
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
@@ -56,4 +56,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-
